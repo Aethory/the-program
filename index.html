@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>THE PROGRAM — a Meridian Dynamics evaluation</title>
+<meta name="description" content="A story game. You are Candidate 9. Every answer is on the record. The better you score, the worse it goes." />
+<meta name="color-scheme" content="light" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f2ede1'/%3E%3Ctext x='50' y='72' font-size='64' text-anchor='middle' fill='%231a1611' font-family='Georgia'%3E9%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div id="grain"></div>
+
+<!-- Title card -->
+<section id="screen-title" class="screen visible">
+  <p class="overline">MERIDIAN DYNAMICS — ANNEX 8</p>
+  <h1 class="game-title">THE<br />PROGRAM</h1>
+  <p class="tagline">You are Candidate 9. Every answer is on the record.</p>
+  <button id="btn-begin" class="stamp-btn">BEGIN THE PROGRAM</button>
+  <button id="btn-variant" class="variant-btn">VARIANT B: THE OBITUARY <span id="variant-state">[OFF]</span></button>
+  <p class="footnote">A Meridian Dynamics document. This document is false.<br />Headphones recommended. No save file — one run, one record.</p>
+</section>
+
+<!-- Generic question screen -->
+<section id="screen-dept" class="screen">
+  <header class="dept-head">
+    <p class="overline" id="dept-overline">DEPARTMENT 1 OF 5</p>
+    <h2 id="dept-title">LOGISTICS</h2>
+    <p id="dept-flavor" class="dept-flavor"></p>
+  </header>
+  <div id="q-card" class="paper-card">
+    <p class="overline" id="q-count">QUESTION 1 / 6</p>
+    <p id="q-text" class="q-text"></p>
+    <div id="q-options"></div>
+    <div id="stamp" class="stamp">LOGGED.</div>
+    <p id="q-outcome" class="q-outcome"></p>
+    <button id="btn-continue" class="stamp-btn small">CONTINUE</button>
+  </div>
+</section>
+
+<!-- Mirror test -->
+<section id="screen-mirror" class="screen">
+  <p class="overline">THE MIRROR TEST</p>
+  <div id="mirror-text" class="mirror-text"></div>
+  <button id="btn-mirror-next" class="stamp-btn small hidden">THE LEDGER</button>
+</section>
+
+<!-- The Ledger -->
+<section id="screen-ledger" class="screen">
+  <p class="overline">THE LEDGER — YOUR RECORD, PRINTED</p>
+  <div id="ledger-text" class="mirror-text small-text"></div>
+  <button id="btn-ledger-next" class="stamp-btn small hidden">THE FOLDED LETTER</button>
+</section>
+
+<!-- The Folded Letter / the Gate -->
+<section id="screen-gate" class="screen">
+  <div class="paper-card gate-card">
+    <p class="overline" id="gate-overline">AN INTERNAL MEMO, NOT TO YOU</p>
+    <p class="gate-letter" id="gate-letter">Please tell no one about the program. Survey results
+    are in. The company has chosen <strong>none</strong> of the candidates.<br /><br />
+    You will be <strong>de-accessioned</strong> at the end of the week.</p>
+    <p class="overline gate-prompt" id="gate-prompt">OVER THE INTERCOM, WITHOUT ORDER:</p>
+    <p class="q-text">"Candidate 9. Final instruction. Please do one of three things:"</p>
+    <div id="gate-options"></div>
+  </div>
+</section>
+
+<!-- Act III audition (ASCENDANT path) -->
+<section id="screen-audition" class="screen">
+  <p class="overline">ACT III — THE HEARING</p>
+  <p class="auditor-line" id="auditor-speaker">THE AUDITOR:</p>
+  <p class="q-text" id="audition-question"></p>
+  <div id="audition-options"></div>
+  <p id="audition-count" class="overline"></p>
+</section>
+
+<!-- Endings -->
+<section id="screen-ending" class="screen">
+  <p id="ending-kicker" class="overline">ENDING</p>
+  <h2 id="ending-title" class="ending-title">ERASED</h2>
+  <div id="ending-body" class="ending-body"></div>
+  <button id="btn-replay" class="stamp-btn small">RUN IT AGAIN</button>
+</section>
+
+<script src="js/content.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

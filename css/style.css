@@ -1,0 +1,165 @@
+/* THE PROGRAM — Meridian Annex 8. Paper, ink, stamp-red, restraint. */
+:root {
+  --paper: #f2ede1;
+  --paper-dark: #e6e0d0;
+  --ink: #1a1611;
+  --ink-soft: #3a352d;
+  --stamp: #a03024;
+  --stamp-soft: #d8b8b0;
+  --shadow: rgba(26, 22, 17, 0.55);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0d0b09;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+#grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: 50; opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.screen { display: none; width: min(920px, 96vw); min-height: 78vh; }
+.screen.visible { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+/* ---------- overline / kicker ---------- */
+.overline {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.32em;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  margin-bottom: 1.1rem;
+}
+
+/* ---------- title ---------- */
+.game-title {
+  font-size: clamp(3.4rem, 13vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  font-weight: 900;
+  color: var(--paper);
+  text-shadow: 4px 4px 0 var(--stamp), 8px 8px 0 rgba(0,0,0,0.4);
+  margin: 0.4rem 0 1.2rem;
+  text-align: center;
+}
+.tagline { color: var(--paper-dark); font-style: italic; margin-bottom: 2.2rem; text-align: center; }
+.variant-btn {
+  margin-top: 0.9rem; background: none; border: 1px solid var(--ink-soft);
+  color: var(--paper-dark); font-family: 'Courier New', monospace; letter-spacing: 0.1em;
+  padding: 0.5rem 0.8rem; cursor: pointer; font-size: 0.72rem;
+}
+.variant-btn:hover { border-color: var(--stamp); color: #fff; }
+.footnote { margin-top: 2rem; font-size: 0.68rem; color: #6e675c; text-align: center; line-height: 1.6; }
+
+/* ---------- paper cards ---------- */
+.paper-card {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  box-shadow: 10px 10px 0 var(--shadow);
+  padding: 1.6rem 1.8rem;
+  width: min(640px, 92vw);
+  position: relative;
+}
+
+/* ---------- buttons ---------- */
+.stamp-btn {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  font-size: 0.95rem;
+  color: var(--stamp);
+  background: transparent;
+  border: 3px double var(--stamp);
+  padding: 0.85rem 2.4rem;
+  transform: rotate(-1.5deg);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.stamp-btn:hover { transform: rotate(-1.5deg) scale(1.04); background: rgba(160, 48, 36, 0.08); }
+.stamp-btn.small { font-size: 0.78rem; padding: 0.55rem 1.6rem; }
+
+/* ---------- departments ---------- */
+.dept-head { text-align: center; margin-bottom: 1.4rem; }
+.dept-head h2 {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  letter-spacing: 0.08em;
+  font-weight: 900;
+  color: var(--paper);
+  text-shadow: 3px 3px 0 var(--stamp);
+}
+.dept-flavor { color: var(--paper-dark); font-style: italic; margin-top: 0.5rem; }
+
+.q-text { font-size: 1.25rem; line-height: 1.45; margin: 0.6rem 0 1rem; }
+.q-outcome {
+  min-height: 1.5rem; font-style: italic; color: var(--ink-soft);
+  border-left: 3px solid var(--stamp-soft); padding-left: 0.8rem; margin: 0.8rem 0;
+  font-size: 0.95rem; visibility: hidden;
+}
+
+.q-option {
+  display: block; width: 100%; text-align: left;
+  background: var(--paper-dark);
+  border: 1.5px solid var(--ink);
+  padding: 0.7rem 0.9rem; margin: 0.45rem 0;
+  font-size: 1rem; font-family: Georgia, serif; cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+.q-option:hover { transform: translateX(6px); background: #ded7c4; }
+.q-option:disabled { opacity: 0.45; cursor: default; transform: none; }
+
+/* the stamp */
+.stamp {
+  position: absolute; top: -18px; right: -14px;
+  font-family: 'Courier New', monospace; font-weight: 700; letter-spacing: 0.3em;
+  font-size: 1.05rem; color: var(--stamp);
+  border: 4px double var(--stamp); padding: 0.35rem 0.9rem 0.3rem;
+  transform: rotate(8deg) scale(2.4); opacity: 0; pointer-events: none;
+  border-radius: 4px; background: rgba(242, 237, 225, 0.92);
+}
+.stamp.pop { animation: stampPop 0.45s ease forwards; }
+@keyframes stampPop {
+  0% { transform: rotate(8deg) scale(2.6); opacity: 0; }
+  55% { transform: rotate(8deg) scale(0.92); opacity: 1; }
+  100% { transform: rotate(8deg) scale(1); opacity: 1; }
+}
+
+#btn-continue { margin-top: 0.9rem; }
+
+/* ---------- mirror & ledger ---------- */
+.mirror-text {
+  background: var(--paper); border: 2px solid var(--ink); box-shadow: 10px 10px 0 var(--shadow);
+  width: min(720px, 92vw); padding: 1.6rem; font-size: 1.05rem; line-height: 1.65;
+  white-space: pre-wrap; min-height: 220px;
+}
+.small-text { font-size: 0.92rem; font-family: 'Courier New', monospace; }
+.hidden { visibility: hidden; }
+
+/* ---------- gate ---------- */
+.gate-card { border-style: double; border-width: 5px; }
+.gate-letter { font-size: 1.1rem; line-height: 1.6; margin: 0.8rem 0 1.2rem; font-style: italic; }
+.gate-prompt { margin-top: 0.6rem; }
+
+/* ---------- audition ---------- */
+.auditor-line { font-family: 'Courier New', monospace; letter-spacing: 0.2em; color: var(--stamp); font-weight: 700; }
+
+/* ---------- endings ---------- */
+.ending-title {
+  font-size: clamp(2.6rem, 9vw, 4.6rem); font-weight: 900; letter-spacing: 0.05em;
+  color: var(--paper); text-shadow: 4px 4px 0 var(--stamp); margin-bottom: 1.2rem; text-align: center;
+}
+.ending-body {
+  color: var(--paper-dark); white-space: pre-wrap; line-height: 1.75; text-align: center;
+  max-width: 640px; margin-bottom: 1.6rem; font-size: 1.05rem;
+}
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
