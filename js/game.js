@@ -41,6 +41,9 @@ const state = {
   qIndex: 0,
   ledger: [],
   keystones: [],
+  minigameDone: false,
+  minigameResult: null,
+  auditionIndex: 0,
 };
 
 function V() { return VARIANTS[state.variant]; }
@@ -59,7 +62,13 @@ $('btn-variant').addEventListener('click', () => {
   state.variant = state.variant === 'standard' ? 'obituary' : 'standard';
   $('variant-state').textContent = state.variant === 'standard' ? '[OFF]' : '[ON]';
 });
-$('btn-begin').addEventListener('click', () => { resetAxes(); showDept(0); });
+$('btn-voice').addEventListener('click', () => Voice.enable(!Voice.enabled));
+$('btn-begin').addEventListener('click', () => {
+  resetAxes();
+  Voice.enable(true);
+  Voice.speak('Welcome, Candidate Nine.');
+  showDept(0);
+});
 
 /* ---------- act 1 ---------- */
 function dept() { return CONTENT.departments[state.deptIndex]; }
@@ -67,12 +76,38 @@ function dept() { return CONTENT.departments[state.deptIndex]; }
 function showDept(i) {
   state.deptIndex = i;
   state.qIndex = 0;
-  $('dept-overline').textContent = V().deptFiles[dept().id];
-  $('dept-title').textContent = dept().title;
-  $('dept-flavor').textContent = dept().flavor;
+  const d = dept();
+  if (d.id === 'logistics' && !state.minigameDone) {
+    show('screen-minigame');
+    StormShift.start($('minigame-canvas'));
+    return;
+  }
+  $('dept-overline').textContent = V().deptFiles[d.id];
+  $('dept-title').textContent = d.title;
+  $('dept-flavor').textContent = d.flavor;
+  Voice.speak(d.flavor);
   show('screen-dept');
   renderQuestion();
 }
+
+window.completeStormShift = (result) => {
+  state.minigameDone = true;
+  state.minigameResult = result;
+  const text = result === 'win'
+    ? 'You drove through the storm. Five crates out of five.'
+    : 'The storm got there first. The manifest is incomplete.';
+  state.ledger.push({ dept: 'LOGISTICS', q: 'STORM SHIFT', choice: text });
+  showDept(0);
+};
+
+$('btn-minigame-skip').addEventListener('click', () => {
+  if (state.minigameDone) return;
+  if (window.StormShift) StormShift.stop();
+  state.minigameDone = true;
+  state.minigameResult = 'skipped';
+  state.ledger.push({ dept: 'LOGISTICS', q: 'STORM SHIFT', choice: 'You would rather not.' });
+  showDept(0);
+});
 
 function renderQuestion() {
   const d = dept();
@@ -123,6 +158,11 @@ $('btn-continue').addEventListener('click', () => {
   runMirror();
 });
 
+// Speak the battlefield aloud where the building demands silence.
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.q-option')) Voice.beep(520, 80, 'square', 0.08);
+});
+
 /* ---------- act 2: the mirror & the ledger ---------- */
 function typewrite(el, text, speed, done) {
   el.textContent = '';
@@ -138,8 +178,10 @@ function typewrite(el, text, speed, done) {
 function runMirror() {
   show('screen-mirror');
   const lines = state.keystones.map((k) => `${k.dept}.\nYou said: “${k.choice}”`).join('\n\n');
+  const unspoken = 'Somebody wrote every one of these words down the moment you spoke them.';
   const opening = 'The Supervisor reads your records back to you in your own voice.\n\n';
-  typewrite($('mirror-text'), opening + lines + '\n\nSomebody wrote every one of these words down the moment you spoke them.', 12, () => {
+  typewrite($('mirror-text'), opening + lines + '\n\n' + unspoken, 12, () => {
+    Voice.speak(opening + lines + unspoken);
     $('btn-mirror-next').classList.remove('hidden');
   });
 }
@@ -155,6 +197,7 @@ $('btn-ledger-next').addEventListener('click', () => {
   $('gate-letter').textContent = V().gateLetter;
   $('gate-overline').textContent = V().gateOverline;
   $('gate-prompt').textContent = V().gatePrompt;
+  Voice.speak(V().gateLetter + ' Candidate Nine. Final instruction. Please do one of three things.');
   const box = $('gate-options');
   box.innerHTML = '';
   const opts = [
@@ -207,6 +250,7 @@ function showEnding(key) {
   $('ending-kicker').textContent = 'MERIDIAN DYNAMICS — FILE CLOSED';
   $('ending-title').textContent = V().endings[key];
   $('ending-body').textContent = e.body;
+  Voice.speak(V().endings[key] + '.');
   show('screen-ending');
 }
 

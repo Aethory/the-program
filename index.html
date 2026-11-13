@@ -19,7 +19,18 @@
   <p class="tagline">You are Candidate 9. Every answer is on the record.</p>
   <button id="btn-begin" class="stamp-btn">BEGIN THE PROGRAM</button>
   <button id="btn-variant" class="variant-btn">VARIANT B: THE OBITUARY <span id="variant-state">[OFF]</span></button>
+  <button id="btn-voice" class="variant-btn">VOICE <span id="voice-state">[OFF]</span></button>
   <p class="footnote">A Meridian Dynamics document. This document is false.<br />Headphones recommended. No save file — one run, one record.</p>
+</section>
+
+<!-- LOGISTICS minigame -->
+<section id="screen-minigame" class="screen">
+  <p class="overline">LOGISTICS — STORM SHIFT</p>
+  <div class="crt-frame">
+    <canvas id="minigame-canvas" width="384" height="216"></canvas>
+  </div>
+  <p id="minigame-status" class="dept-flavor">FETCH 5 CRATES BEFORE THE STORM CLOSES. ARROWS / WASD.</p>
+  <button id="btn-minigame-skip" class="variant-btn">“I would rather not.”</button>
 </section>
 
 <!-- Generic question screen -->
@@ -84,6 +95,8 @@
 </section>
 
 <script src="js/content.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/minigame-logistics.js"></script>
 <script src="js/game.js"></script>
 </body>
 </html>
